@@ -6,7 +6,7 @@ import LoginPage from "../LoginPage";
 
 
 
-const routes = {
+export const routes = {
   root: "/"
   // Outras rotas aqui
 };
