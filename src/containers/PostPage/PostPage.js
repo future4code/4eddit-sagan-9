@@ -3,9 +3,11 @@ import Header from '../../Components/Header'
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styled from 'styled-components'
-import {connect} from 'react-redux'
-import {push} from 'connected-react-router'
-import {routes} from '../Router/index' 
+import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
+import { routes } from '../Router/index'
+import PostWrapper from '../../Components/PostWrapper'
+import { createComment } from '../../Actions/index'
 
 const LabelButton = styled.p`
   font-size: 12px;
@@ -14,6 +16,12 @@ const LabelButton = styled.p`
 `
 
 class PostPage extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      newComment: ''
+    }
+  }
 
   setLogout = () => {
     this.props.goToLogin()
@@ -22,27 +30,47 @@ class PostPage extends Component {
 
   componentDidMount() {
     const token = window.localStorage.getItem('token')
-        if(token === null){
-            this.props.goToLogin()
-            console.log(token)
-        }
-    console.log(this.props.postData.post)
+    if (token === null) {
+      this.props.goToLogin()
+      console.log(token)
+    }
+  }
+
+  saveComment = (e) => {
+    this.setState({
+      newComment: e.target.value
+    })
+    console.log(this.state.newComment)
+  }
+
+  sendComment = () => {
+    this.props.createNewComment(this.state.newComment, this.props.postData.post.id)
+    this.setState({newComment: ''})
   }
 
   render() {
     let postDetails = ""
-    if (this.props.postData){
+    if (this.props.postData) {
       postDetails = <div>
-                      <p>{this.props.postData.post.text}</p><textarea/>
-                    </div>
+        <PostWrapper post={this.props.postData.post} /><textarea value={this.state.newComment} onChange={this.saveComment} />
+        <button onClick={this.sendComment}>Enviar</button>
+        {this.props.postData.post.comments.map((element, index) => {
+          return (
+            <div key={index}>
+              <p><b>{element.username}</b></p>
+              <p>{element.text}</p>
+            </div>
+          )
+        })}
+      </div>
     }
-    else{
-      postDetails = "Por favor selecione um post"
+    else {
+      this.props.goToPostFeed()
     }
     return (
       <div>
         <Header
-          logOutButton = {<IconButton
+          logOutButton={<IconButton
             onClick={this.setLogout}
             color="inherit"
           >
@@ -54,8 +82,8 @@ class PostPage extends Component {
         />
         {postDetails}
       </div>
-  )
-}
+    )
+  }
 }
 
 function mapStateToProps(state) {
@@ -66,7 +94,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    goToLogin: () => dispatch(push(routes.root))
+    goToLogin: () => dispatch(push(routes.root)),
+    goToPostFeed: () => dispatch(push(routes.postFeed)),
+    createNewComment: (comment, postId) => dispatch(createComment(comment, postId))
   };
 }
 
