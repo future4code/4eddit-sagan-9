@@ -30,12 +30,12 @@ class LoginPage extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header/>
         <form onSubmit={this.submitLogin}>
           <label>E-mail</label>
-          <input name='email' onChange={this.saveInfo}></input>
+          <input type='text' name='email' onChange={this.saveInfo}></input>
           <label>Senha</label>
-          <input name='password' onChange={this.saveInfo}></input>
+          <input type="password" name='password' onChange={this.saveInfo}></input>
           <button type={onsubmit}>Entrar</button>
         </form>
         <p onClick={this.goToRegistration}><u>Ainda não tem cadastro?Clique aqui para cadastrar</u></p>

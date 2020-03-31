@@ -1,5 +1,8 @@
+import { CardActions } from "@material-ui/core"
+
 const initialState = {
-  postList: []
+  postList: [],
+  postChoose: ""
 }
 
 const posts = (state = initialState, action) => {
@@ -8,6 +11,11 @@ const posts = (state = initialState, action) => {
       console.log(action.payload.posts)
       return {
         ...state, postList: action.payload.posts
+      }
+    case 'SEND_ID':
+      console.log(action.payload.postInfo)
+      return {
+        ...state, postChoose: action.payload.postInfo
       }
     // case 'GET_ TRIPS_DETAILS':
     //   return {

@@ -22,34 +22,23 @@ const ButtonBar = styled.div`
   display: flex;
   margin: 10px;
 `
-const LabelButton = styled.p`
-  font-size: 12px;
-  margin: -5px;
-  padding: 0;
-`
 const logoUrl = 'https://user-images.githubusercontent.com/56808066/77929693-58d5ac00-7280-11ea-88df-ff8e6a32f424.jpg'
 
 class PrimarySearchAppBar extends React.Component {
+  constructor(props){
+    super(props)
+  }
+
   render() {
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
             <DivWrapper>
-              <Logo onClick={this.props.goToHomePage} src={logoUrl}></Logo>
-
+              <Logo src={logoUrl}></Logo>
               <ButtonBar>
-                <IconButton
-                  onClick={this.props.goToTripsList}
-                  color="inherit"
-                >
-                  <div>
-                    <AccountCircle />
-                    <LabelButton>login</LabelButton>
-                  </div>
-                </IconButton>
+                {this.props.logOutButton}
               </ButtonBar>
-
             </DivWrapper>
           </Toolbar>
         </AppBar>
@@ -58,16 +47,7 @@ class PrimarySearchAppBar extends React.Component {
   }
 }
 
-PrimarySearchAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    goToHomePage: () => dispatch(push(routes.root)),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(PrimarySearchAppBar);
+export default PrimarySearchAppBar;
 
 

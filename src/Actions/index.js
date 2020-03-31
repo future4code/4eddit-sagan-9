@@ -14,6 +14,15 @@ export const showPosts = (posts) => {
 	}
 }
 
+export const sendID = (postInfo) => {
+  return {
+    type: 'SEND_ID',
+      payload: {
+        postInfo
+      }
+  }
+}
+
 
 export const newUser = (userData) => async (dispatch) => {
   console.log(userData)
@@ -78,7 +87,7 @@ export const getPostList = () => async (dispatch) => {
 export const getPostDetails = (postId) => async (dispatch) => {
   console.log('teste')
   const token = window.localStorage.getItem('token')
-  try {
+  try{
     const result = await axios.get(`${baseUrl}/posts/${postId}`,
       {
         headers: {
@@ -87,9 +96,11 @@ export const getPostDetails = (postId) => async (dispatch) => {
         }
       }      
     )
+
     console.log(result.data)
+    dispatch (sendID(result.data))
     dispatch(push(routes.postDetails))
-  } catch (error) {
+  }catch (error) {
     console.log(error)
   }
 }
