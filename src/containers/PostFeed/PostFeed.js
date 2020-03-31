@@ -2,8 +2,25 @@ import React, { Component } from 'react'
 import Header from '../../Components/Header'
 import { connect } from 'react-redux'
 import { getPostList, getPostDetails } from '../../Actions/'
+import {routes} from '../Router/index'
+import {push} from 'connected-react-router'
+import IconButton from '@material-ui/core/IconButton';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import styled from 'styled-components'
+import PostWrapper from '../../Components/PostWrapper'
 
-const array = [1, 2, 3, 4, 5, 6]
+const LabelButton = styled.p`
+  font-size: 12px;
+  margin: -5px;
+  padding: 0;
+`
+
+const PostCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black
+`
 
 class PostFeed extends Component {
   constructor(props) {
@@ -14,7 +31,12 @@ class PostFeed extends Component {
   }
 
   componentDidMount() {
-    this.props.getPosts()
+    const token = window.localStorage.getItem('token')
+        if(token === null){
+            this.props.goToLogin()
+            console.log(token)
+        }
+        this.props.getPosts()
     console.log(this.props.getMyPosts)
   }
 
@@ -27,16 +49,30 @@ class PostFeed extends Component {
     console.log('oi')
   }
 
+  setLogout = () => {
+    this.props.goToLogin()
+    localStorage.clear()
+  }
+
   render() {
     return (
       <div>
-        <Header />
+        <Header
+        logOutButton = {<IconButton
+          onClick={this.setLogout}
+          color="inherit"
+        >
+          <div>
+            <AccountCircle />
+            <LabelButton>Logout</LabelButton>
+          </div>
+        </IconButton>} />
         <button onClick={this.funcaoTeste}>teste</button>
         {this.props.getMyPosts.map(element => {
           return ( 
-            <div onClick={() => this.goToPostDetails(element.id)} key={element.id} >
-              <p>{element.text}</p>
-            </div>
+            <PostCard onClick={() => this.goToPostDetails(element.id)} key={element.id} >
+              <PostWrapper post={element}/>
+            </PostCard>
           )
         })}
           
@@ -48,7 +84,8 @@ class PostFeed extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     getPosts: () => dispatch(getPostList()),
-    goToPostInfo:(postId) => dispatch(getPostDetails(postId))
+    goToPostInfo:(postId) => dispatch(getPostDetails(postId)),
+    goToLogin: () => dispatch(push(routes.root))
   };
 }
 

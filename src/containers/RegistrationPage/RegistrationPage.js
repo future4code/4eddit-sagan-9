@@ -27,15 +27,15 @@ class RegistrationPage extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header/>
                 RegistrationPage
         <form onSubmit={this.sendData}>
           <label>Email</label>
-          <input name='email' onChange={this.handleInputChange}></input>
+          <input type='text' name='email' onChange={this.handleInputChange}></input>
           <label>Senha</label>
-          <input name='password' onChange={this.handleInputChange}></input>
+          <input type='password' name='password' onChange={this.handleInputChange}></input>
           <label>Nome de usuário</label>
-          <input name='username' onChange={this.handleInputChange}></input>
+          <input type='text' name='username' onChange={this.handleInputChange}></input>
           <button type={onsubmit}>Cadastrar</button>
         </form>
       </div>
