@@ -6,20 +6,20 @@ import { push } from "connected-react-router";
 const baseUrl = 'https://us-central1-missao-newton.cloudfunctions.net/fourEddit'
 
 export const showPosts = (posts) => {
-	return {
-		type: 'GET_ POSTS',
-		payload: {
-			posts
-				}
-	}
+  return {
+    type: 'GET_ POSTS',
+    payload: {
+      posts
+    }
+  }
 }
 
 export const sendID = (postInfo) => {
   return {
     type: 'SEND_ID',
-      payload: {
-        postInfo
-      }
+    payload: {
+      postInfo
+    }
   }
 }
 
@@ -57,7 +57,7 @@ export const setLogin = (userInfo) => async (dispatch) => {
 
     const token = result.data.token
     console.log(token)
-    window.localStorage.setItem("token", token)    
+    window.localStorage.setItem("token", token)
 
     dispatch(push(routes.postFeed))
   } catch (error) {
@@ -75,7 +75,7 @@ export const getPostList = () => async (dispatch) => {
           'Content-Type': 'application/json',
           auth: token
         }
-      }      
+      }
     )
     console.log(result.data.posts)
     dispatch(showPosts(result.data.posts))
@@ -87,23 +87,69 @@ export const getPostList = () => async (dispatch) => {
 export const getPostDetails = (postId) => async (dispatch) => {
   console.log('teste')
   const token = window.localStorage.getItem('token')
-  try{
+  try {
     const result = await axios.get(`${baseUrl}/posts/${postId}`,
       {
         headers: {
           'Content-Type': 'application/json',
           auth: token
         }
-      }      
+      }
     )
 
     console.log(result.data)
-    dispatch (sendID(result.data))
+    dispatch(sendID(result.data))
     dispatch(push(routes.postDetails))
-  }catch (error) {
+  } catch (error) {
     console.log(error)
   }
 }
+
+export const createComment = (comment, postId) => async (dispatch) => {
+  console.log(comment, postId)
+  const token = window.localStorage.getItem('token')
+  const myText = { text: comment }
+  try {
+    const result = await axios.post(`${baseUrl}/posts/${postId}/comment`,
+      myText,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          auth: token
+        }
+      }
+    )
+
+    console.log(result.data)
+    dispatch(getPostDetails(postId))
+    // dispatch(push(routes.postDetails))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const voteForPost = (add, postId) => async (dispatch) => {
+  console.log(add, postId)
+  const token = window.localStorage.getItem('token')
+  const voteDirection = { direction: add }
+  try {
+    const result = await axios.put(`${baseUrl}/posts/${postId}/vote`,
+      voteDirection,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          auth: token
+        }
+      }
+    )
+
+    console.log(result.data)
+    dispatch(getPostList())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 
 

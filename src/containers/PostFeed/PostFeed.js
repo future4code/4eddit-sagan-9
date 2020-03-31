@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import Header from '../../Components/Header'
 import { connect } from 'react-redux'
-import { getPostList, getPostDetails } from '../../Actions/'
-import {routes} from '../Router/index'
-import {push} from 'connected-react-router'
+import { getPostList, getPostDetails, voteForPost } from '../../Actions/'
+import { routes } from '../Router/index'
+import { push } from 'connected-react-router'
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styled from 'styled-components'
 import PostWrapper from '../../Components/PostWrapper'
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const LabelButton = styled.p`
   font-size: 12px;
@@ -26,17 +28,16 @@ class PostFeed extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
     }
   }
 
   componentDidMount() {
     const token = window.localStorage.getItem('token')
-        if(token === null){
-            this.props.goToLogin()
-            console.log(token)
-        }
-        this.props.getPosts()
+    if (token === null) {
+      this.props.goToLogin()
+      console.log(token)
+    }
+    this.props.getPosts()
     console.log(this.props.getMyPosts)
   }
 
@@ -53,29 +54,53 @@ class PostFeed extends Component {
     this.props.goToLogin()
     localStorage.clear()
   }
+  voteUser = (vote, postId, voteDirection) => {
+    if (vote === 'vote +1') {
+      console.log(voteDirection)
+      vote = voteDirection = 0 ? 0 : 1
+      console.log(vote)
+      this.props.voteUserDirection(vote, postId)
+      /* arrowUp: <ArrowDropUpIcon /> */
+    } else {
+      this.setState({ minusVoteBoolean: !this.state.minusVoteBoolean })
+      console.log(this.state.minusVoteBoolean)
+      vote = this.state.minusVoteBoolean ? -1 : 0
+      console.log(vote)
+      this.props.voteUserDirection(vote, postId)
+      /* arrowDown: <ArrowDropDownIcon /> */
+    }
+  }
 
   render() {
+
     return (
       <div>
         <Header
-        logOutButton = {<IconButton
-          onClick={this.setLogout}
-          color="inherit"
-        >
-          <div>
-            <AccountCircle />
-            <LabelButton>Logout</LabelButton>
-          </div>
-        </IconButton>} />
+          logOutButton={<IconButton
+            onClick={this.setLogout}
+            color="inherit"
+          >
+            <div>
+              <AccountCircle />
+              <LabelButton>Logout</LabelButton>
+            </div>
+          </IconButton>} />
         <button onClick={this.funcaoTeste}>teste</button>
         {this.props.getMyPosts.map(element => {
-          return ( 
-            <PostCard onClick={() => this.goToPostDetails(element.id)} key={element.id} >
-              <PostWrapper post={element}/>
+          return (
+            <PostCard key={element.id} >
+              <PostWrapper
+                arrowUp= <ArrowDropUpIcon/>
+                arrowDown= <ArrowDropDownIcon />
+                seeDetails={() => this.goToPostDetails(element.id)} post={element}
+                votePlus={() => this.voteUser('vote +1', element.id, element.userVoteDirection)}
+                voteMinus={() => this.voteUser('vote -1', element.id, element.userVoteDirection)}
+              />
+
             </PostCard>
           )
         })}
-          
+
       </div>
     )
   }
@@ -84,8 +109,9 @@ class PostFeed extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     getPosts: () => dispatch(getPostList()),
-    goToPostInfo:(postId) => dispatch(getPostDetails(postId)),
-    goToLogin: () => dispatch(push(routes.root))
+    goToPostInfo: (postId) => dispatch(getPostDetails(postId)),
+    goToLogin: () => dispatch(push(routes.root)),
+    voteUserDirection: (vote, postId) => dispatch(voteForPost(vote, postId))
   };
 }
 
