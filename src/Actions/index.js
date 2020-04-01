@@ -23,9 +23,7 @@ export const sendID = (postInfo) => {
   }
 }
 
-
 export const newUser = (userData) => async (dispatch) => {
-  console.log(userData)
   try {
     const result = await axios.post(`${baseUrl}/signup`,
       userData,
@@ -43,7 +41,6 @@ export const newUser = (userData) => async (dispatch) => {
 }
 
 export const setLogin = (userInfo) => async (dispatch) => {
-  console.log(userInfo)
   try {
     const result = await axios.post(`${baseUrl}/login`,
       userInfo,
@@ -54,19 +51,16 @@ export const setLogin = (userInfo) => async (dispatch) => {
       }
     )
     console.log(result.data)
-
     const token = result.data.token
-    console.log(token)
     window.localStorage.setItem("token", token)
-
     dispatch(push(routes.postFeed))
   } catch (error) {
     console.log(error)
+    alert('Senha ou e-mail incorretos. Favor tentar novamente')
   }
 }
 
 export const getPostList = () => async (dispatch) => {
-  console.log('teste')
   const token = window.localStorage.getItem('token')
   try {
     const result = await axios.get(`${baseUrl}/posts`,
@@ -85,7 +79,6 @@ export const getPostList = () => async (dispatch) => {
 }
 
 export const getPostDetails = (postId) => async (dispatch) => {
-  console.log('teste')
   const token = window.localStorage.getItem('token')
   try {
     const result = await axios.get(`${baseUrl}/posts/${postId}`,
@@ -96,7 +89,6 @@ export const getPostDetails = (postId) => async (dispatch) => {
         }
       }
     )
-
     console.log(result.data)
     dispatch(sendID(result.data))
     dispatch(push(routes.postDetails))
@@ -106,7 +98,6 @@ export const getPostDetails = (postId) => async (dispatch) => {
 }
 
 export const createComment = (comment, postId) => async (dispatch) => {
-  console.log(comment, postId)
   const token = window.localStorage.getItem('token')
   const myText = { text: comment }
   try {
@@ -122,13 +113,12 @@ export const createComment = (comment, postId) => async (dispatch) => {
 
     console.log(result.data)
     dispatch(getPostDetails(postId))
-    // dispatch(push(routes.postDetails))
   } catch (error) {
     console.log(error)
   }
 }
 
-export const voteForPost = (add, postId) => async (dispatch) => {
+export const voteForPostFromFeed = (add, postId) => async (dispatch) => {
   console.log(add, postId)
   const token = window.localStorage.getItem('token')
   const voteDirection = { direction: add }
@@ -144,7 +134,29 @@ export const voteForPost = (add, postId) => async (dispatch) => {
     )
 
     console.log(result.data)
-    dispatch(getPostDetails(postId))
+    dispatch(getPostList())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const voteForPostFromDetails = (add, postId) => async (dispatch) => {
+  console.log(add, postId)
+  const token = window.localStorage.getItem('token')
+  const voteDirection = { direction: add }
+  try {
+    const result = await axios.put(`${baseUrl}/posts/${postId}/vote`,
+      voteDirection,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          auth: token
+        }
+      }
+    )
+
+    console.log(result.data)
+ dispatch(getPostDetails(postId))
   } catch (error) {
     console.log(error)
   }

@@ -1,9 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import styled from 'styled-components'
@@ -13,10 +10,10 @@ const Logo = styled.img`
 height: 80px;
 `
 const DivWrapper = styled.div`
-display: flex;
-justify-content: space-between;
-width: 100vw;
-height: auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 10vh;
 `
 const ButtonBar = styled.div`
   display: flex;
@@ -29,25 +26,32 @@ class PrimarySearchAppBar extends React.Component {
     super(props)
   }
 
+  goToFeed = () => {
+    this.props.goToFeed()
+  }
+
   render() {
     return (
-      <div>
+      <DivWrapper>
         <AppBar position="static">
           <Toolbar>
-            <DivWrapper>
-              <Logo src={logoUrl}></Logo>
+              <Logo src={logoUrl} onClick={this.goToFeed}></Logo>
               <ButtonBar>
                 {this.props.logOutButton}
               </ButtonBar>
-            </DivWrapper>
           </Toolbar>
         </AppBar>
-      </div>
+      </DivWrapper>
     );
   }
 }
 
+function mapDispatchToProps (dispatch){
+  return{
+    goToFeed: ()=> dispatch(push(routes.postFeed))
+  }
+}
 
-export default PrimarySearchAppBar;
+export default connect(null, mapDispatchToProps)(PrimarySearchAppBar);
 
 
