@@ -28,6 +28,8 @@ class PostFeed extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      arrowUp: <ArrowDropUpIcon/>,
+      arrowDown: <ArrowDropDownIcon />
     }
   }
 
@@ -56,18 +58,32 @@ class PostFeed extends Component {
   }
   voteUser = (vote, postId, voteDirection) => {
     if (vote === 'vote +1') {
-      console.log(voteDirection)
-      vote = voteDirection = 0 ? 0 : 1
+        console.log(voteDirection)
+        if(voteDirection === 1){
+          console.log('true')
+          vote = 0
+        }
+        else if(voteDirection === 0 || voteDirection === -1){
+          console.log('false')
+          vote = 1
+        }
       console.log(vote)
       this.props.voteUserDirection(vote, postId)
       /* arrowUp: <ArrowDropUpIcon /> */
-    } else {
-      this.setState({ minusVoteBoolean: !this.state.minusVoteBoolean })
-      console.log(this.state.minusVoteBoolean)
-      vote = this.state.minusVoteBoolean ? -1 : 0
-      console.log(vote)
-      this.props.voteUserDirection(vote, postId)
-      /* arrowDown: <ArrowDropDownIcon /> */
+    } 
+    else {
+        console.log(voteDirection)
+        if(voteDirection === -1){
+          console.log('true')
+          vote = 0
+        }
+        else if(voteDirection === 0 || voteDirection === 1){
+          console.log('false')
+          vote = -1
+        }
+        console.log(vote)
+        this.props.voteUserDirection(vote, postId)
+        /* arrowDown: <ArrowDropDownIcon /> */
     }
   }
 
@@ -90,13 +106,12 @@ class PostFeed extends Component {
           return (
             <PostCard key={element.id} >
               <PostWrapper
-                arrowUp= <ArrowDropUpIcon/>
-                arrowDown= <ArrowDropDownIcon />
+                arrowUp= {<ArrowDropUpIcon/>}
+                arrowDown= {<ArrowDropDownIcon />}
                 seeDetails={() => this.goToPostDetails(element.id)} post={element}
                 votePlus={() => this.voteUser('vote +1', element.id, element.userVoteDirection)}
                 voteMinus={() => this.voteUser('vote -1', element.id, element.userVoteDirection)}
               />
-
             </PostCard>
           )
         })}
@@ -105,7 +120,8 @@ class PostFeed extends Component {
     )
   }
 }
-
+{/* <ArrowDropUpIcon/>
+<ArrowDropDownIcon /> */}
 function mapDispatchToProps(dispatch) {
   return {
     getPosts: () => dispatch(getPostList()),
