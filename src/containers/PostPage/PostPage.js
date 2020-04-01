@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { routes } from '../Router/index'
 import PostWrapper from '../../Components/PostWrapper'
-import { createComment, voteForPost, voteForComment } from '../../Actions/index'
+import { createComment, voteForComment, voteForPostFromDetails } from '../../Actions/index'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
@@ -39,7 +39,6 @@ class PostPage extends Component {
     const token = window.localStorage.getItem('token')
     if (token === null) {
       this.props.goToLogin()
-      console.log(token)
     }
   }
 
@@ -47,83 +46,61 @@ class PostPage extends Component {
     this.setState({
       newComment: e.target.value
     })
-    console.log(this.state.newComment)
-    
   }
 
   sendComment = () => {
-    console.log(this.props.postData)
     this.props.createNewComment(this.state.newComment, this.props.postData.post.id)
     this.setState({newComment: ''})
   }
 
   voteUser = (vote, postId, voteDirection) => {
     if (vote === 'vote +1') {
-        console.log(voteDirection)
         if(voteDirection === 1){
-          console.log('true')
           vote = 0
         }
         else if(voteDirection === 0 || voteDirection === -1){
-          console.log('false')
           vote = 1
         }
-      console.log(vote)
       this.props.voteUserDirection(vote, postId)
-      /* arrowUp: <ArrowDropUpIcon /> */
     } 
     else {
-        console.log(voteDirection)
         if(voteDirection === -1){
-          console.log('true')
           vote = 0
         }
         else if(voteDirection === 0 || voteDirection === 1){
-          console.log('false')
           vote = -1
         }
-        console.log(vote)
         this.props.voteUserDirection(vote, postId)
-        /* arrowDown: <ArrowDropDownIcon /> */
     }
   }
 
   voteUserComment = (vote, postId, commentId, voteDirection) => {
-    console.log(vote, postId, commentId, voteDirection)
     if (vote === 'vote +1') {
-        console.log(voteDirection)
         if(voteDirection === 1){
-          console.log('true')
           vote = 0
         }
         else if(voteDirection === 0 || voteDirection === -1){
-          console.log('false')
           vote = 1
         }
       console.log(vote)
       this.props.commentVoteUserDirection(vote, postId, commentId)
-      /* arrowUp: <ArrowDropUpIcon /> */
     } 
-    // else {
-    //     console.log(voteDirection)
-    //     if(voteDirection === -1){
-    //       console.log('true')
-    //       vote = 0
-    //     }
-    //     else if(voteDirection === 0 || voteDirection === 1){
-    //       console.log('false')
-    //       vote = -1
-    //     }
-    //     console.log(vote)
-    //     this.props.voteUserDirection(vote, postId)
-    //     /* arrowDown: <ArrowDropDownIcon /> */
-    // }
+    else {
+        if(voteDirection === -1){
+          vote = 0
+        }
+        else if(voteDirection === 0 || voteDirection === 1){
+          vote = -1
+        }
+        this.props.commentVoteUserDirection(vote, postId, commentId)
+    }
   }
 
   render() {
     let postDetails = ""
     if (this.props.postData) {
-      postDetails = <div>
+      postDetails = 
+      <div>
         <PostWrapper 
         post={this.props.postData.post}
         arrowUp= {<ArrowDropUpIcon/>}
@@ -139,11 +116,11 @@ class PostPage extends Component {
               <p><b>{element.username}</b></p>
               <p>{element.text}</p>
               <div>
-              <ArrowDropUpIcon onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)}/>}
-              <ArrowDropDownIcon onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
-            <p>{element.votesCount}</p>
-            <p>{element.userVoteDirection}</p>
-        </div>
+                <ArrowDropUpIcon onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)}/>}
+                <ArrowDropDownIcon onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
+                <p>{element.votesCount}</p>
+                <p>{element.userVoteDirection}</p>
+              </div>
             </div>
           )
         })}
@@ -155,15 +132,15 @@ class PostPage extends Component {
     return (
       <div>
         <Header
-          logOutButton={<IconButton
-            onClick={this.setLogout}
-            color="inherit"
-          >
-            <div>
-              <AccountCircle />
-              <LabelButton>Logout</LabelButton>
-            </div>
-          </IconButton>}
+        logOutButton={<IconButton
+        onClick={this.setLogout}
+        color="inherit"
+        >
+        <div>
+        <AccountCircle />
+        <LabelButton>Logout</LabelButton>
+        </div>
+        </IconButton>}
         />
         <InfoWrapper>
           {postDetails}
@@ -184,7 +161,7 @@ function mapDispatchToProps(dispatch) {
     goToLogin: () => dispatch(push(routes.root)),
     goToPostFeed: () => dispatch(push(routes.postFeed)),
     createNewComment: (comment, postId) => dispatch(createComment(comment, postId)),
-    voteUserDirection: (vote, postId) => dispatch(voteForPost(vote, postId)),
+    voteUserDirection: (vote, postId) => dispatch(voteForPostFromDetails(vote, postId)),
     commentVoteUserDirection: (vote, postId, commentId) => dispatch(voteForComment(vote, postId, commentId))
   };
 }

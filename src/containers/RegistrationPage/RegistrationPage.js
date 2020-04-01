@@ -16,19 +16,16 @@ class RegistrationPage extends Component {
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ userData: { ...this.state.userData, [name]: value } })
-    console.log(this.state.userData)
   }
   sendData = (event) => {
     this.props.sendDataToApi(this.state.userData)
     event.preventDefault();
-    console.log('sendData')
   }
 
   render() {
     return (
       <div>
         <Header/>
-                RegistrationPage
         <form onSubmit={this.sendData}>
           <label>Email</label>
           <input type='text' name='email' onChange={this.handleInputChange}></input>

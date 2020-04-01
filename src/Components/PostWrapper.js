@@ -26,27 +26,29 @@ class PostWrapper extends React.Component {
     return (
       <div>
         <div onClick={this.props.seeDetails}>
-          <div><h3>{this.props.post.username}</h3></div>
-          <div><p>{this.props.post.text}</p></div>
+            <div><h3>{this.props.post.username}</h3></div>
+            <div><p>{this.props.post.text}</p></div>
         </div>
         <div>
-          <LikeAndCommentWrapper>
+            <LikeAndCommentWrapper>
             <ArrowWrapper>
-              <div onClick={this.props.votePlus}>
-                {this.props.arrowUp}
-                {this.props.post.votesCount}
-              </div>
-              <div onClick={this.props.voteMinus}>
-                {this.props.arrowDown}
-                {this.props.post.userVoteDirection}
-              </div>
-            </ArrowWrapper>
-            <div>
-            </div>
+        <div 
+          onClick={this.props.votePlus}>
+          {this.props.arrowUp}
+          {this.props.post.votesCount}
+        </div>
+        <div 
+          onClick={this.props.voteMinus}>
+          {this.props.arrowDown}
+          {this.props.post.userVoteDirection}
+        </div>
+          </ArrowWrapper>
+        <div>
+        </div>
           </LikeAndCommentWrapper>
           <CommentsWrapper>
-            <Comment onClick={this.props.seeDetails} />
-            {this.props.post.commentsNumber}
+          <Comment onClick={this.props.seeDetails} />
+          {this.props.post.commentsNumber}
           </CommentsWrapper>
         </div>
       </div>

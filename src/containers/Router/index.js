@@ -11,7 +11,6 @@ export const routes = {
   registrationPage: '/signup',
   postFeed: '/posts',
   postDetails: `/posts/detail`
-  // Outras rotas aqui
 };
 
 function Router(props) {
