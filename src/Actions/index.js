@@ -144,13 +144,31 @@ export const voteForPost = (add, postId) => async (dispatch) => {
     )
 
     console.log(result.data)
-    dispatch(getPostList())
+    dispatch(getPostDetails(postId))
   } catch (error) {
     console.log(error)
   }
 }
 
+export const voteForComment = (vote, postId, commentId) => async (dispatch) => {
+  console.log(vote, postId, commentId)
+  const token = window.localStorage.getItem('token')
+  const voteDirection = { direction: vote }
+  try {
+    const result = await axios.put(`${baseUrl}/posts/${postId}/comment/${commentId}/vote`,
+      voteDirection,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          auth: token
+        }
+      }
+    )
 
-
-
+    console.log(result.data)
+    dispatch(getPostDetails(postId))
+  } catch (error) {
+    console.log(error)
+  }
+}
 
