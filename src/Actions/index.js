@@ -184,3 +184,20 @@ export const voteForComment = (vote, postId, commentId) => async (dispatch) => {
   }
 }
 
+export const createPost = (postContent) => async (dispatch) => {
+  const token = window.localStorage.getItem('token')
+  try{
+    const result = axios.post(`${baseUrl}/posts`, postContent,
+    {headers: {
+      'Content-Type': 'application/json',
+      auth: token
+    }}
+    )
+    console.log(result.data)
+    dispatch(getPostList())
+  }
+  catch(error){
+    alert('Falha na requisição, favor tentar novamente mais tarde')
+    console.log(error)
+  }
+}
