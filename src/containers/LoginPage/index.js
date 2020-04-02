@@ -3,7 +3,7 @@ import Header from '../../Components/Header'
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
 import { routes } from '../Router/index'
-import {setLogin} from '../../Actions/index'
+import { setLogin } from '../../Actions/index'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
@@ -14,7 +14,7 @@ const PageWrapper = styled.div`
   align-items: center;
   width: 80%;
   border: 1px solid black;
-  margin: 0 auto
+  margin: 0 auto;
 `
 
 const ContentWrapper = styled.div`
@@ -38,7 +38,7 @@ const FormWrapper = styled.form`
   height: 25vh;
   border: 1px dotted grey;
   margin: 40px;
-  padding: 20px
+  padding: 20px;
 `
 const TitleWrapper = styled.h2`
   color: #ff9800;
@@ -46,7 +46,7 @@ const TitleWrapper = styled.h2`
 
 const ButtonWrapper = styled(Button)`
   margin-top: 10px;
-  margin-bottom: 30px
+  margin-bottom: 30px;
 `
 const GoToSingUpButton = styled.p`
     &:hover {
@@ -75,39 +75,39 @@ class LoginPage extends Component {
 
   render() {
     return (
-        <PageWrapper>
-          <Header/>
-          <ContentWrapper>
-            <FormWrapper onSubmit={this.submitLogin}>
-              <TitleWrapper>Bem Vindo, usuário!</TitleWrapper>
-              <label><b>E-mail</b></label>
-              <Input 
-              type='text' 
-              name='email' 
+      <PageWrapper>
+        <Header />
+        <ContentWrapper>
+          <FormWrapper onSubmit={this.submitLogin}>
+            <TitleWrapper>Bem Vindo, usuário!</TitleWrapper>
+            <label><b>E-mail</b></label>
+            <Input
+              type='text'
+              name='email'
               onChange={this.saveInfo}
-              >
-              </Input>
-              <label><b>Senha</b></label>
-              <Input 
-              type="password" 
-              name='password' 
+            >
+            </Input>
+            <label><b>Senha</b></label>
+            <Input
+              type="password"
+              name='password'
               onChange={this.saveInfo}
-              >
-              </Input>
-              <ButtonWrapper
+            >
+            </Input>
+            <ButtonWrapper
               type={onsubmit}
               variant="contained"
-              >
+            >
               Entrar
               </ButtonWrapper>
-            </FormWrapper>
-            <GoToSingUpButton 
+          </FormWrapper>
+          <GoToSingUpButton
             onClick={this.goToRegistration}
-            >
-              <u>Ainda não tem cadastro? Clique aqui para cadastrar</u>
-            </GoToSingUpButton>
-          </ContentWrapper>
-        </PageWrapper>
+          >
+            <u>Ainda não tem cadastro? Clique aqui para cadastrar</u>
+          </GoToSingUpButton>
+        </ContentWrapper>
+      </PageWrapper>
     );
   }
 }

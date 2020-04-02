@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { routes } from '../containers/Router'
 
 const Logo = styled.img`
-height: 80px;
+height: 10vh;
 `
 const DivWrapper = styled.div`
   display: flex;
