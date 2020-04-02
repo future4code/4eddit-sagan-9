@@ -5,15 +5,14 @@ import { connect } from "react-redux";
 import { routes } from '../Router/index'
 import { setLogin } from '../../Actions/index'
 import styled from 'styled-components'
-import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
+import { TextField, Button, Paper, Typography } from '@material-ui/core'
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
-  border: 1px solid black;
+  width: 100%;
   margin: 0 auto;
 `
 
@@ -22,33 +21,29 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  backgroun-color: white;
-  background-image: url('https://lh3.googleusercontent.com/proxy/fa_V2f-co32B7rI-px1q-FfSdclHUXn3p_DDnSeCKsA0PiS1VdHQ7wr1PkdG1ihXMNohTAxg6B3CPCZw3Un5EOsiD8IJ45ddiUFhKnFUq0LJ7tgDJIqyvipxwA');
-  background-repeat: no-repeat;
-  background-position: center left;
-  background-attachment: fixed;
+  background-color: #e5e9ed;
   height: 90vh;
+  padding: 10vh;
 `
 const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  min-width: 20%;
-  height: 25vh;
-  border: 1px dotted grey;
-  margin: 40px;
-  padding: 20px;
+  width: 90%;
+  padding: 50px 10px 10px 40px;
+  color: #4f4f50;
 `
 const TitleWrapper = styled.h2`
   color: #ff9800;
 `
 
-const ButtonWrapper = styled(Button)`
-  margin-top: 10px;
-  margin-bottom: 30px;
+const ButtonPadding =styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding: 10px 20px 20px 50px;
+  color: #4f4f50;
 `
-const GoToSingUpButton = styled.p`
+const GoToSignUpButton = styled.p`
     &:hover {
         color: #ff7828
     }
@@ -78,34 +73,51 @@ class LoginPage extends Component {
       <PageWrapper>
         <Header />
         <ContentWrapper>
-          <FormWrapper onSubmit={this.submitLogin}>
-            <TitleWrapper>Bem Vindo, usuário!</TitleWrapper>
-            <label><b>E-mail</b></label>
-            <Input
-              type='text'
-              name='email'
-              onChange={this.saveInfo}
-            >
-            </Input>
-            <label><b>Senha</b></label>
-            <Input
-              type="password"
-              name='password'
-              onChange={this.saveInfo}
-            >
-            </Input>
-            <ButtonWrapper
-              type={onsubmit}
-              variant="contained"
-            >
-              Entrar
-              </ButtonWrapper>
-          </FormWrapper>
-          <GoToSingUpButton
-            onClick={this.goToRegistration}
-          >
-            <u>Ainda não tem cadastro? Clique aqui para cadastrar</u>
-          </GoToSingUpButton>
+          <Paper elevation={10}>
+              <FormWrapper onSubmit={this.submitLogin}>
+                <Typography 
+                gutterBottom variant="h5" 
+                align='justify'
+                >
+                  Bem Vindo, usuário!
+                </Typography>
+                <TextField
+                  label="Email"
+                  style={{ margin: 12 }}
+                  onChange={this.saveInfo}
+                  name='email'
+                  type='text'
+                  required
+                />
+                <TextField
+                  label="Senha"
+                  style={{ margin: 12 }}
+                  onChange={this.saveInfo}
+                  name='password'
+                  type='password'
+                  required
+                />
+                <ButtonPadding>
+                  <Button 
+                  variant="contained" 
+                  color="primary" 
+                  type={onsubmit}
+                  >
+                    Entrar
+                  </Button>
+                </ButtonPadding>
+                <Typography
+                  gutterBottom
+                  align='center'
+                  variant="caption" >
+                <GoToSignUpButton 
+                onClick={this.goToRegistration}
+                >
+                  Ainda não tem cadastro? Clique aqui para cadastrar
+                </GoToSignUpButton>
+                </Typography>
+              </FormWrapper>
+            </Paper>
         </ContentWrapper>
       </PageWrapper>
     );
@@ -120,4 +132,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(null, mapDispatchToProps)(LoginPage);
-

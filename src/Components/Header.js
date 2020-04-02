@@ -15,6 +15,12 @@ const DivWrapper = styled.div`
   width: 100%;
   height: 10vh;
 `
+const ToolbarWrapper = styled(Toolbar)`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 10vh;
+`
 const ButtonBar = styled.div`
   display: flex;
   margin: 10px;
@@ -34,12 +40,12 @@ class PrimarySearchAppBar extends React.Component {
     return (
       <DivWrapper>
         <AppBar position="static">
-          <Toolbar>
+          <ToolbarWrapper>
               <Logo src={logoUrl} onClick={this.goToFeed}></Logo>
               <ButtonBar>
                 {this.props.logOutButton}
               </ButtonBar>
-          </Toolbar>
+          </ToolbarWrapper>
         </AppBar>
       </DivWrapper>
     );
