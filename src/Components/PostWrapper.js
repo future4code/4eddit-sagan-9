@@ -12,7 +12,7 @@ const PaperWrapper = styled(Paper)`
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
-  color: #4f4f50
+  color: #4f4f50;
 `
 
 const CommentsWrapper = styled.div`
@@ -20,7 +20,7 @@ const CommentsWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 3vh;
-    margin-top: 10px
+    margin-top: 10px;
 `
 const ArrowWrapper = styled.div`
     display: flex;
@@ -35,7 +35,7 @@ const LikeAndCommentWrapper = styled.div`
     margin-right: 20px;
 `
 const TitleWrapper = styled.h3`
-  color: #ff7828
+  color: #ff7828;
 `
 
 
