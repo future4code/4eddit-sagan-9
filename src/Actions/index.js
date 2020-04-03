@@ -1,9 +1,8 @@
-import React from 'react'
 import axios from 'axios'
 import { routes } from '../containers/Router/index';
 import { push } from "connected-react-router";
 
-const baseUrl = 'https://us-central1-missao-newton.cloudfunctions.net/fourEddit'
+const baseUrl = 'https://us-central1-future-apis.cloudfunctions.net/fourEddit'
 
 export const showPosts = (posts) => {
   return {
@@ -26,14 +25,8 @@ export const sendID = (postInfo) => {
 export const newUser = (userData) => async (dispatch) => {
   try {
     const result = await axios.post(`${baseUrl}/signup`,
-      userData,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+      userData
     )
-    console.log(result.data)
     const newUserInfo = {
       email: userData.email,
       password: userData.password
@@ -50,11 +43,9 @@ export const setLogin = (userInfo) => async (dispatch) => {
       userInfo,
       {
         headers: {
-          'Content-Type': 'application/json'
         }
       }
     )
-    console.log(result.data)
     const token = result.data.token
     window.localStorage.setItem("token", token)
     dispatch(push(routes.postFeed))
@@ -70,12 +61,10 @@ export const getPostList = () => async (dispatch) => {
     const result = await axios.get(`${baseUrl}/posts`,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-    console.log(result.data.posts)
     dispatch(showPosts(result.data.posts))
   } catch (error) {
     console.log(error)
@@ -88,12 +77,10 @@ export const getPostDetails = (postId) => async (dispatch) => {
     const result = await axios.get(`${baseUrl}/posts/${postId}`,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-    console.log(result.data)
     dispatch(sendID(result.data))
     dispatch(push(routes.postDetails))
   } catch (error) {
@@ -109,13 +96,10 @@ export const createComment = (comment, postId) => async (dispatch) => {
       myText,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-
-    console.log(result.data)
     dispatch(getPostDetails(postId))
   } catch (error) {
     console.log(error)
@@ -123,7 +107,6 @@ export const createComment = (comment, postId) => async (dispatch) => {
 }
 
 export const voteForPostFromFeed = (add, postId) => async (dispatch) => {
-  console.log(add, postId)
   const token = window.localStorage.getItem('token')
   const voteDirection = { direction: add }
   try {
@@ -131,13 +114,10 @@ export const voteForPostFromFeed = (add, postId) => async (dispatch) => {
       voteDirection,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-
-    console.log(result.data)
     dispatch(getPostList())
   } catch (error) {
     console.log(error)
@@ -145,7 +125,6 @@ export const voteForPostFromFeed = (add, postId) => async (dispatch) => {
 }
 
 export const voteForPostFromDetails = (add, postId) => async (dispatch) => {
-  console.log(add, postId)
   const token = window.localStorage.getItem('token')
   const voteDirection = { direction: add }
   try {
@@ -153,13 +132,10 @@ export const voteForPostFromDetails = (add, postId) => async (dispatch) => {
       voteDirection,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-
-    console.log(result.data)
  dispatch(getPostDetails(postId))
   } catch (error) {
     console.log(error)
@@ -167,7 +143,6 @@ export const voteForPostFromDetails = (add, postId) => async (dispatch) => {
 }
 
 export const voteForComment = (vote, postId, commentId) => async (dispatch) => {
-  console.log(vote, postId, commentId)
   const token = window.localStorage.getItem('token')
   const voteDirection = { direction: vote }
   try {
@@ -175,13 +150,10 @@ export const voteForComment = (vote, postId, commentId) => async (dispatch) => {
       voteDirection,
       {
         headers: {
-          'Content-Type': 'application/json',
           auth: token
         }
       }
     )
-
-    console.log(result.data)
     dispatch(getPostDetails(postId))
   } catch (error) {
     console.log(error)
@@ -193,11 +165,9 @@ export const createPost = (postContent) => async (dispatch) => {
   try{
     const result = axios.post(`${baseUrl}/posts`, postContent,
     {headers: {
-      'Content-Type': 'application/json',
       auth: token
     }}
     )
-    console.log(result.data)
     dispatch(getPostList())
   }
   catch(error){
@@ -205,6 +175,3 @@ export const createPost = (postContent) => async (dispatch) => {
     console.log(error)
   }
 }
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Iml2a…DUwfQ
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.

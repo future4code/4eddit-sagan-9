@@ -5,15 +5,15 @@ import { connect } from "react-redux";
 import { routes } from '../Router/index'
 import { setLogin } from '../../Actions/index'
 import styled from 'styled-components'
-import Input from '@material-ui/core/Input';
 import { TextField, Button, Paper, Typography } from '@material-ui/core'
+import Footer from "../../Components/Footer";
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin: 0 auto;
+  height: 100vh
 `
 
 const ContentWrapper = styled.div`
@@ -119,6 +119,7 @@ class LoginPage extends Component {
               </FormWrapper>
             </Paper>
         </ContentWrapper>
+        <Footer/>
       </PageWrapper>
     );
   }

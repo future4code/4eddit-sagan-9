@@ -6,19 +6,21 @@ import { routes } from '../Router/index'
 import { newUser } from '../../Actions/index'
 import styled from 'styled-components'
 import { TextField, Button, Paper, Typography } from '@material-ui/core'
+import Footer from '../../Components/Footer';
 
 const BodyWrapper = styled.div`
   background-color: #e5e9ed;
-  height: 100vh;
+  max-height: 100vh;
 `
 const PageWrapper = styled.form`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-around;
-  width: 24vw;
-  height: 30vh;
-  margin: 20vh auto;
+  width: 30vw;
+  height: 85vh;
+  margin: auto;
+  padding-top: 10vh;
 `
 const FormWrapper = styled.div`
   display: flex;
@@ -105,9 +107,9 @@ class RegistrationPage extends Component {
                 Já possui uma conta? <GoToLogInButton onClick={this.goToSignInPage}>Faça login.</GoToLogInButton>
               </Typography>
             </FormWrapper>
-
           </Paper>
         </PageWrapper>
+        <Footer/>
       </BodyWrapper>
     )
   }

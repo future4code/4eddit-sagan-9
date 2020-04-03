@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Comment from '@material-ui/icons/Comment'
-import { TextField, Button, Paper, Typography } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 
 const ContentWrapper = styled.div`
   width: 100%;
@@ -14,7 +14,6 @@ const PaperWrapper = styled(Paper)`
   justify-content: flex-end;
   color: #4f4f50;
 `
-
 const CommentsWrapper = styled.div`
     display: flex;
     justify-content: space-between;
@@ -38,11 +37,7 @@ const TitleWrapper = styled.h3`
   color: #ff7828;
 `
 
-
 class PostWrapper extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
@@ -64,11 +59,10 @@ class PostWrapper extends React.Component {
             onClick={this.props.voteMinus}>
             {this.props.arrowDown}
             </div>
-            {this.props.post.userVoteDirection}
           </ArrowWrapper>
           <CommentsWrapper>
             <Comment onClick={this.props.seeDetails} />
-            {this.props.post.commentsNumber}
+            {this.props.post.commentsCount}
           </CommentsWrapper>
         </LikeAndCommentWrapper>
       </PaperWrapper>
@@ -76,7 +70,5 @@ class PostWrapper extends React.Component {
     )
   }
 }
-
-
 
 export default PostWrapper

@@ -11,13 +11,14 @@ import PostWrapper from '../../Components/PostWrapper'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { Paper, Typography, Button, TextField } from '@material-ui/core'
+import Footer from '../../Components/Footer'
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  margin: 0 auto;
+  // width: 100%;
+  max-width: 100vw;
 `
 const LabelButton = styled.p`
   font-size: 12px;
@@ -57,11 +58,7 @@ class PostFeed extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      post: {},
-      arrows:{
-        up: '',
-        down: ''
-      }
+      post: {}
     }
   }
 
@@ -100,37 +97,24 @@ class PostFeed extends Component {
     if (vote === 'vote +1') {
         if(voteDirection === 1){
           vote = 0
-          this.setState({
-            arrows: {up: '', down: ''}
-          })
         }
         else if(voteDirection === 0 || voteDirection === -1){
           vote = 1
-          this.setState({
-            arrows: {up: postId, down: ''}
-          })
         }
       this.props.voteUserDirection(vote, postId)
     } 
     else {
         if(voteDirection === -1){
           vote = 0
-          this.setState({
-            arrows: {up: '', down: ''}
-          })
         }
         else if(voteDirection === 0 || voteDirection === 1){
           vote = -1
-          this.setState({
-            arrows: {up: '', down: postId}
-          })
         }
         this.props.voteUserDirection(vote, postId)
     }
   }
 
   render() {
-     
     return (
       <PageWrapper>
         <Header
@@ -185,16 +169,15 @@ class PostFeed extends Component {
             </FormWrapper>
           </PaperWrapper>
           {this.props.getMyPosts.map(element => {
-            let arrowUp = this.state.arrows.up === element.id ? 
-            <ArrowDropUpIcon color='primary'/> : <ArrowDropUpIcon/>
-            let arrowDown = this.state.arrows.down === element.id ? 
-            <ArrowDropDownIcon color='primary'/> : <ArrowDropDownIcon/>
             return (
               <PostCard key={element.id} >
                 <PostWrapper
-                arrowUp= {arrowUp}
-                arrowDown= {arrowDown}
-                seeDetails={() => this.goToPostDetails(element.id)} post={element}
+                arrowUp= {element.userVoteDirection === 1? 
+                <ArrowDropUpIcon color='primary'/> : <ArrowDropUpIcon/>}
+                arrowDown= {element.userVoteDirection === -1? 
+                <ArrowDropDownIcon color='primary'/> : <ArrowDropDownIcon/>}
+                seeDetails={() => this.goToPostDetails(element.id)} 
+                post={element}
                 votePlus={() => this.voteUser('vote +1', element.id, element.userVoteDirection)}
                 voteMinus={() => this.voteUser('vote -1', element.id, element.userVoteDirection)}
                 />
@@ -202,6 +185,7 @@ class PostFeed extends Component {
             )
           })}
         </ContentWrapper>
+        <Footer/>
       </PageWrapper>
     )
   }

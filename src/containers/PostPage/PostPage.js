@@ -10,8 +10,12 @@ import { IconButton, Paper, Typography, Button, TextField } from '@material-ui/c
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Footer from '../../Components/Footer'
 
 const PageWrapper = styled.div`
+  min-height:100vh;
+`
+const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,11 +31,10 @@ const LabelButton = styled.div`
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  // background-image: url(https://previews.123rf.com/images/krekdm/krekdm1605/krekdm160500006/59277013-social-media-seamless-pattern-can-be-used-for-wallpaper-website-background-doodles-hand-drawn-vector.jpg)
-  // background-image= url('')
-  background-color: #e5e9ed
+  background-color: #e5e9ed;
+  min-height:85vh;
 `
 const FormWrapper = styled.form`
   display: flex;
@@ -76,10 +79,6 @@ class PostPage extends Component {
       arrows: {
         up: '',
         down: ''
-      },
-      arrowsPost: {
-        up: '',
-        down: ''
       }
     }
   }
@@ -94,7 +93,6 @@ class PostPage extends Component {
     if (token === null) {
       this.props.goToLogin()
     }
-    console.log(this.props.postData)
   }
 
   saveComment = (e) => {
@@ -103,7 +101,8 @@ class PostPage extends Component {
     })
   }
 
-  sendComment = () => {
+  sendComment = (e) => {
+    e.preventDefault()
     this.props.createNewComment(this.state.newComment, this.props.postData.post.id)
     this.setState({ newComment: '' })
   }
@@ -112,30 +111,18 @@ class PostPage extends Component {
     if (vote === 'vote +1') {
       if (voteDirection === 1) {
         vote = 0
-        this.setState({
-          arrowsPost: {up: '', down: ''}
-        })
       }
       else if (voteDirection === 0 || voteDirection === -1) {
         vote = 1
-        this.setState({
-          arrowsPost: {up: postId, down: ''}
-        })
       }
       this.props.voteUserDirection(vote, postId)
     }
     else {
       if (voteDirection === -1) {
         vote = 0
-        this.setState({
-          arrowsPost: {up: '', down: ''}
-        })
       }
       else if (voteDirection === 0 || voteDirection === 1) {
         vote = -1
-        this.setState({
-          arrowsPost: {up: '', down: postId}
-        })
       }
       this.props.voteUserDirection(vote, postId)
     }
@@ -143,34 +130,21 @@ class PostPage extends Component {
 
   voteUserComment = (vote, postId, commentId, voteDirection) => {
     if (vote === 'vote +1') {
-      console.log(commentId)
       if (voteDirection === 1) {
         vote = 0
-        this.setState({
-          arrows: { up: '', down: '' }
-        })
       }
       else if (voteDirection === 0 || voteDirection === -1) {
         vote = 1
-        this.setState({
-          arrows: { up: commentId, down: '' }
-        })
       }
-      console.log(vote)
       this.props.commentVoteUserDirection(vote, postId, commentId)
     }
     else {
       if (voteDirection === -1) {
         vote = 0
-        this.setState({
-          arrows: { up: '', down: '' }
-        })
       }
       else if (voteDirection === 0 || voteDirection === 1) {
         vote = -1
-        this.setState({
-          arrows: { up: '', down: commentId }
-        })
+
       }
       this.props.commentVoteUserDirection(vote, postId, commentId)
     }
@@ -178,25 +152,22 @@ class PostPage extends Component {
 
 
   render() {
+    let eachPost = this.props.postData.post
     let postDetails = ""
     if (this.props.postData) {
-      let arrowUp = this.state.arrowsPost.up === this.props.postData.post.id ?
-              <ArrowDropUpIcon color='primary'/> : <ArrowDropUpIcon/>
-
-      let arrowDown = this.state.arrowsPost.down === this.props.postData.post.id ?
-              <ArrowDropDownIcon color='primary' /> : <ArrowDropDownIcon/>
       postDetails =
-        <PageWrapper>
+        <ContentWrapper>
           <PostCard>
             <PostWrapper
-              post={this.props.postData.post}
-              arrowUp={arrowUp}
-              arrowDown={arrowDown}
-              votePlus={() => this.voteUser('vote +1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
-              voteMinus={() => this.voteUser('vote -1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
+              post={eachPost}
+              arrowUp={eachPost.userVoteDirection === 1 ?
+                <ArrowDropUpIcon color='primary' /> : <ArrowDropUpIcon />}
+              arrowDown={eachPost.userVoteDirection === -1 ?
+                <ArrowDropDownIcon color='primary' /> : <ArrowDropDownIcon />}
+              votePlus={() => this.voteUser('vote +1', eachPost.id, eachPost.userVoteDirection)}
+              voteMinus={() => this.voteUser('vote -1', eachPost.id, eachPost.userVoteDirection)}
             />
           </PostCard>
-
           <PaperWrapper elevation={10}>
             <FormWrapper onSubmit={this.sendComment}>
               <TextField
@@ -221,73 +192,68 @@ class PostPage extends Component {
               </div>
             </FormWrapper>
           </PaperWrapper>
-
-          {this.props.postData.post.comments.map((element, index) => {
-            console.log(element)
-            let arrowUp = this.state.arrows.up === element.id ?
-              <ArrowDropUpIcon color='primary' onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)} /> : <ArrowDropUpIcon onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
-
-            let arrowDown = this.state.arrows.down === element.id ?
-              <ArrowDropDownIcon color='primary' onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} /> : <ArrowDropDownIcon onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
-
+          {eachPost.comments.map((element, index) => {
+            const clickUp = () => this.voteUserComment('vote +1', eachPost.id, element.id, element.userVoteDirection)
+            let arrowUp = element.userVoteDirection === 1 ?
+              <ArrowDropUpIcon color='primary' onClick={clickUp} />
+              : <ArrowDropUpIcon onClick={clickUp} />
+            const clickDown = () => this.voteUserComment('vote -1', eachPost.id, element.id, element.userVoteDirection)
+            let arrowDown = element.userVoteDirection === -1 ?
+              <ArrowDropDownIcon color='primary' onClick={clickDown} />
+              : <ArrowDropDownIcon onClick={clickDown} />
             return (
               <PaperWrapper key={index} elevation={10}>
                 <div>
-                  <Typography display='inline' variant="body2"  >
-                    <Typography gutterBottom variant="h6" color='primary' display='inline'>{`${element.username} `}</Typography>
-                      respondeu:
+                  <Typography
+                    display='inline'
+                    variant="body2" >
+                    <Typography
+                      gutterBottom
+                      variant="h6"
+                      color='primary'
+                      display='inline'
+                    >
+                      {`${element.username} `}
                     </Typography>
+                    respondeu:
+                  </Typography>
                 </div>
                 <CommentWrapper>
                   <VoteArrowWrapper>
-
                     {arrowUp}
-                    {element.votesCount}
+                    {element.votesCount || 0}
                     {arrowDown}
-
-                    {/* <PostWrapper
-                      arrowUp={arrowUp}
-                      arrowDown={arrowDown}
-                      // seeDetails={() => this.goToPostDetails(element.id)} post={element}
-                      votePlus={() => this.voteUserComment('vote +1', element.id, element.userVoteDirection)}
-                      voteMinus={() => this.voteUserComment('vote -1', element.id, element.userVoteDirection)}
-
-                    /> */}
-
-                    {/* <ArrowDropUpIcon onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
-                    <p>{element.votesCount}</p>
-                    <ArrowDropDownIcon onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} /> */}
-
-
                   </VoteArrowWrapper>
                   <div>{element.text}</div>
                 </CommentWrapper>
-
               </PaperWrapper>
             )
           })}
-        </PageWrapper>
+        </ContentWrapper>
     }
     else {
       this.props.goToPostFeed()
     }
     return (
-      <div>
+      <PageWrapper>
         <Header
-          logOutButton={<IconButton
-            onClick={this.setLogout}
-            color="inherit"
-          >
+          logOutButton={
+            <IconButton
+              onClick={this.setLogout}
+              color="inherit"
+            >
             <div>
               <AccountCircle />
               <LabelButton>Logout</LabelButton>
             </div>
-          </IconButton>}
+            </IconButton>
+          }
         />
         <InfoWrapper>
           {postDetails}
         </InfoWrapper>
-      </div>
+        <Footer />
+      </PageWrapper>
     )
   }
 }

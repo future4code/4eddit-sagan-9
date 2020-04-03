@@ -28,9 +28,6 @@ const ButtonBar = styled.div`
 const logoUrl = 'https://user-images.githubusercontent.com/56808066/77929693-58d5ac00-7280-11ea-88df-ff8e6a32f424.jpg'
 
 class PrimarySearchAppBar extends React.Component {
-  constructor(props){
-    super(props)
-  }
 
   goToFeed = () => {
     this.props.goToFeed()
