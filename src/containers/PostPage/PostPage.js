@@ -29,6 +29,9 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  // background-image: url(https://previews.123rf.com/images/krekdm/krekdm1605/krekdm160500006/59277013-social-media-seamless-pattern-can-be-used-for-wallpaper-website-background-doodles-hand-drawn-vector.jpg)
+  // background-image= url('')
+  background-color: #e5e9ed
 `
 const FormWrapper = styled.form`
   display: flex;
@@ -56,6 +59,14 @@ const VoteArrowWrapper = styled.div`
   align-items: center;
   padding-right: 30px;
 `
+const PostCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 15px;
+  width: 100%;
+  border: 1px #ff7828 dotted;
+`
 
 class PostPage extends Component {
   constructor(props) {
@@ -63,6 +74,10 @@ class PostPage extends Component {
     this.state = {
       newComment: '',
       arrows: {
+        up: '',
+        down: ''
+      },
+      arrowsPost: {
         up: '',
         down: ''
       }
@@ -79,6 +94,7 @@ class PostPage extends Component {
     if (token === null) {
       this.props.goToLogin()
     }
+    console.log(this.props.postData)
   }
 
   saveComment = (e) => {
@@ -96,18 +112,30 @@ class PostPage extends Component {
     if (vote === 'vote +1') {
       if (voteDirection === 1) {
         vote = 0
+        this.setState({
+          arrowsPost: {up: '', down: ''}
+        })
       }
       else if (voteDirection === 0 || voteDirection === -1) {
         vote = 1
+        this.setState({
+          arrowsPost: {up: postId, down: ''}
+        })
       }
       this.props.voteUserDirection(vote, postId)
     }
     else {
       if (voteDirection === -1) {
         vote = 0
+        this.setState({
+          arrowsPost: {up: '', down: ''}
+        })
       }
       else if (voteDirection === 0 || voteDirection === 1) {
         vote = -1
+        this.setState({
+          arrowsPost: {up: '', down: postId}
+        })
       }
       this.props.voteUserDirection(vote, postId)
     }
@@ -152,15 +180,22 @@ class PostPage extends Component {
   render() {
     let postDetails = ""
     if (this.props.postData) {
+      let arrowUp = this.state.arrowsPost.up === this.props.postData.post.id ?
+              <ArrowDropUpIcon color='primary'/> : <ArrowDropUpIcon/>
+
+      let arrowDown = this.state.arrowsPost.down === this.props.postData.post.id ?
+              <ArrowDropDownIcon color='primary' /> : <ArrowDropDownIcon/>
       postDetails =
         <PageWrapper>
-          <PostWrapper
-            post={this.props.postData.post}
-            arrowUp={<ArrowDropUpIcon />}
-            arrowDown={<ArrowDropDownIcon />}
-            votePlus={() => this.voteUser('vote +1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
-            voteMinus={() => this.voteUser('vote -1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
-          />
+          <PostCard>
+            <PostWrapper
+              post={this.props.postData.post}
+              arrowUp={arrowUp}
+              arrowDown={arrowDown}
+              votePlus={() => this.voteUser('vote +1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
+              voteMinus={() => this.voteUser('vote -1', this.props.postData.post.id, this.props.postData.post.userVoteDirection)}
+            />
+          </PostCard>
 
           <PaperWrapper elevation={10}>
             <FormWrapper onSubmit={this.sendComment}>
@@ -193,7 +228,7 @@ class PostPage extends Component {
               <ArrowDropUpIcon color='primary' onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)} /> : <ArrowDropUpIcon onClick={() => this.voteUserComment('vote +1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
 
             let arrowDown = this.state.arrows.down === element.id ?
-              <ArrowDropDownIcon color='primary' /> : <ArrowDropDownIcon />
+              <ArrowDropDownIcon color='primary' onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} /> : <ArrowDropDownIcon onClick={() => this.voteUserComment('vote -1', this.props.postData.post.id, element.id, element.userVoteDirection)} />
 
             return (
               <PaperWrapper key={index} elevation={10}>

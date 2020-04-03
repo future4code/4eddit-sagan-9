@@ -34,7 +34,11 @@ export const newUser = (userData) => async (dispatch) => {
       }
     )
     console.log(result.data)
-    dispatch(push(routes.postFeed))
+    const newUserInfo = {
+      email: userData.email,
+      password: userData.password
+    }
+    dispatch(setLogin(newUserInfo))
   } catch (error) {
     console.log(error)
   }
@@ -201,3 +205,6 @@ export const createPost = (postContent) => async (dispatch) => {
     console.log(error)
   }
 }
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Iml2a…DUwfQ
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
